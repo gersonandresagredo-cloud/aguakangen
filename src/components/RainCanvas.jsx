@@ -1,15 +1,12 @@
 import { useEffect, useRef } from 'react';
-import { useReducedMotion } from 'framer-motion';
 import { useIsMobile } from '../lib/hooks';
 
 /** Lluvia fina de gotas en canvas, reactiva a la velocidad de scroll, con salpicaduras. */
 export default function RainCanvas() {
   const canvasRef = useRef(null);
-  const reduced = useReducedMotion();
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    if (reduced) return;
     const c = canvasRef.current;
     const ctx = c.getContext('2d');
     let W, H;
@@ -68,9 +65,7 @@ export default function RainCanvas() {
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', fit);
     };
-  }, [reduced, isMobile]);
-
-  if (reduced) return null;
+  }, [isMobile]);
 
   return (
     <canvas

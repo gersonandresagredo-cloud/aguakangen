@@ -1,15 +1,12 @@
 import { useMemo } from 'react';
-import { useReducedMotion } from 'framer-motion';
 import { useIsMobile } from '../lib/hooks';
 
 /** Burbujas ascendentes fluidas y sutiles, con profundidad (tamaño/velocidad/blur). */
 export default function BubbleField({ className = '' }) {
-  const reduced = useReducedMotion();
   const isMobile = useIsMobile();
   const n = isMobile ? 9 : 18;
 
   const bubbles = useMemo(() => {
-    if (reduced) return [];
     return Array.from({ length: n }, (_, i) => {
       const depth = Math.random();
       const size = 2.5 + depth * depth * 11;
@@ -30,11 +27,10 @@ export default function BubbleField({ className = '' }) {
         op: op.toFixed(2),
       };
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [n, reduced]);
+  }, [n]);
 
   return (
-    <div className={`absolute inset-0 pointer-events-none overflow-hidden ${className}`}>
+    <div className={`bubble-field absolute inset-0 pointer-events-none overflow-hidden ${className}`}>
       {bubbles.map((b) => (
         <span
           key={b.key}

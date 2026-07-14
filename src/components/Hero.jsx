@@ -1,5 +1,5 @@
 import { ArrowUpRight, Play } from 'lucide-react';
-import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import Halo from './Halo';
 import BubbleField from './BubbleField';
 import Parallax from './Parallax';
@@ -11,7 +11,6 @@ import { useIsMobile } from '../lib/hooks';
 
 export default function Hero() {
   const { openChat, openVideo } = useUI();
-  const reduced = useReducedMotion();
   const isMobile = useIsMobile();
   const { scrollY } = useScroll();
 
@@ -44,7 +43,7 @@ export default function Hero() {
           transform: 'translate(-50%, -50%)',
         }}
       >
-        <motion.div style={reduced || isMobile ? {} : { y: machineY, scale: machineScale }}>
+        <motion.div style={isMobile ? {} : { y: machineY, scale: machineScale }}>
           <div style={{ position: 'relative', animation: 'floatY 8s ease-in-out infinite' }}>
             <div
               className="absolute"
@@ -141,7 +140,7 @@ export default function Hero() {
       {/* palabra gigante */}
       <div className="absolute -bottom-[0.16em] left-0 right-0 z-3 text-center pointer-events-none">
         <motion.div
-          style={reduced ? {} : { y: wordY, opacity: wordOpacity }}
+          style={{ y: wordY, opacity: wordOpacity }}
           className="font-display font-semibold leading-[0.86] tracking-[-0.05em] text-white"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}

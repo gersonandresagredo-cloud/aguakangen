@@ -102,9 +102,9 @@ html.kangen-no-native-cursor * {
   100% { transform: scale(1); }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.35s !important;
-    transition-duration: 0.35s !important;
-  }
-}
+/*
+  Nota: NO forzamos animation-duration global bajo prefers-reduced-motion.
+  Antes se aplicaba 0.35s a todo, lo que hacía que las animaciones en bucle
+  (flotar de la máquina, halos, burbujas) fueran frenéticas. Las animaciones
+  decorativas son suaves y continuas, así que se dejan tal cual.
+*/

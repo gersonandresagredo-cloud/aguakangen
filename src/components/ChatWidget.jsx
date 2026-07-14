@@ -125,15 +125,17 @@ export default function ChatWidget() {
           boxShadow: '0 0 44px -8px rgba(28,169,201,.6),0 0 44px -12px rgba(99,102,241,.5),0 12px 40px rgba(0,0,0,.35)',
         }}
       >
-        <span className="flex items-center gap-2.5 pl-[11px] pr-[17px] py-[11px] rounded-full" style={{ background: 'rgba(7,16,19,.94)', backdropFilter: 'blur(20px) saturate(1.4)' }}>
+        <span className={`flex items-center gap-2.5 rounded-full ${isMobile ? 'p-[11px]' : 'pl-[11px] pr-[17px] py-[11px]'}`} style={{ background: 'rgba(7,16,19,.94)', backdropFilter: 'blur(20px) saturate(1.4)' }}>
           <span className="relative w-[38px] h-[38px] rounded-full flex items-center justify-center bg-gradient-to-br from-aqua to-indigo-500">
             <Sparkles className="w-[18px] h-[18px] text-white" />
             <span className="absolute -bottom-px -right-px w-3 h-3 rounded-full bg-[#39d98a] border-2 border-dark" />
           </span>
-          <span className="flex flex-col items-start leading-tight">
-            <span className="text-[13.5px] font-semibold text-white">Reserva tu videollamada</span>
-            <span className="text-[11px] text-aqua-glow">● 15 min · gratis · en línea</span>
-          </span>
+          {!isMobile && (
+            <span className="flex flex-col items-start leading-tight">
+              <span className="text-[13.5px] font-semibold text-white">Reserva tu videollamada</span>
+              <span className="text-[11px] text-aqua-glow">● 15 min · gratis · en línea</span>
+            </span>
+          )}
         </span>
       </motion.button>
 

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { motion, useMotionValue, useAnimationFrame, useReducedMotion } from 'framer-motion';
+import { motion, useMotionValue, useAnimationFrame } from 'framer-motion';
 import { Waves, ShieldCheck, Leaf, Layers, Home } from 'lucide-react';
 
 const ITEMS = [
@@ -29,7 +29,6 @@ export default function Marquee() {
   const trackRef = useRef(null);
   const halfW = useRef(0);
   const x = useMotionValue(0);
-  const reduced = useReducedMotion();
 
   useEffect(() => {
     const measure = () => { if (trackRef.current) halfW.current = trackRef.current.scrollWidth / 2; };
@@ -39,16 +38,18 @@ export default function Marquee() {
   }, []);
 
   useAnimationFrame((time) => {
-    if (reduced || !halfW.current) return;
+    // Mide el ancho de forma perezosa por si el track aún no estaba dibujado al montar.
+    if (!halfW.current && trackRef.current) halfW.current = trackRef.current.scrollWidth / 2;
+    if (!halfW.current) return;
     const drift = (time / 1000) * 26;
     const sy = window.scrollY;
-    let pos = (sy * 0.55 + drift) % halfW.current;
+    const pos = (sy * 0.55 + drift) % halfW.current;
     x.set(-pos);
   });
 
   return (
     <div className="relative bg-bg-light py-9 sm:py-14 overflow-hidden whitespace-nowrap">
-      <motion.div ref={trackRef} style={{ x }} className="inline-flex items-stretch gap-3.5 will-change-transform pl-3.5">
+      <motion.div id="marquee-track" ref={trackRef} style={{ x }} className="inline-flex items-stretch gap-3.5 will-change-transform pl-3.5">
         {LOOP.map((item, i) => (
           <Card key={i} {...item} />
         ))}

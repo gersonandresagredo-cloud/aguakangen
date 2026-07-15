@@ -71,14 +71,14 @@ export default function Hero() {
       </div>
 
       {/* fila superior: claim corto + CTA */}
-      <div className="relative z-2 w-full max-w-[1280px] mx-auto flex flex-wrap justify-between items-start gap-6 self-start">
-        <Parallax speed={-0.1} className="max-w-[400px]">
+      <div className="relative z-2 w-full max-w-[1280px] mx-auto flex flex-col sm:flex-row flex-wrap sm:justify-between items-center sm:items-start text-center sm:text-left gap-6 self-start">
+        <Parallax speed={-0.1} className="max-w-[400px] flex flex-col items-center sm:items-start">
           <Reveal className="inline-flex items-center gap-2 px-[14px] py-[7px] rounded-full bg-white/6 border border-white/14 backdrop-blur-md text-xs text-aqua-glow mb-5">
             <span className="w-[7px] h-[7px] rounded-full bg-aqua-glow shadow-[0_0_10px_#7FE0F0]" />
             Demos disponibles esta semana
           </Reveal>
           <RevealWords
-            className="font-display font-medium leading-[1.12] tracking-[-0.025em]"
+            className="font-display font-medium leading-[1.12] tracking-[-0.025em] text-center sm:text-left"
             style={{ fontSize: 'clamp(26px,3vw,40px)' }}
             words={[
               { text: 'El' }, { text: 'agua' }, { text: 'que' }, { text: 'bebes' },
@@ -97,13 +97,13 @@ export default function Hero() {
         <Parallax speed={-0.06}>
           <Reveal
             delay={400}
-            className="max-w-[350px] flex flex-col items-start gap-4 p-[18px] rounded-[22px] border border-white/10"
+            className="max-w-[350px] flex flex-col items-center sm:items-start text-center sm:text-left gap-4 p-[18px] rounded-[22px] border border-white/10"
             style={{ background: 'rgba(7,16,19,.55)', backdropFilter: 'blur(18px) saturate(1.3)' }}
           >
             <p className="text-sm leading-[1.55] text-white/66">
               Miles de familias ya la beben. Pruébala en directo y decide.
             </p>
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap justify-center sm:justify-start items-center gap-3">
               <GradientPillButton
                 onClick={openChat}
                 cursorLabel="Reservar"

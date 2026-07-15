@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { motion, useMotionValue, useAnimationFrame } from 'framer-motion';
 import { Waves, ShieldCheck, Leaf, Layers, Home } from 'lucide-react';
+import IconBadge from './IconBadge';
 
 const ITEMS = [
   { icon: Waves, title: 'Hidrata de verdad', sub: 'tu cuerpo la absorbe mejor' },
@@ -13,10 +14,8 @@ const LOOP = [...ITEMS, ...ITEMS]; // duplicado para el bucle infinito
 
 function Card({ icon: Icon, title, sub }) {
   return (
-    <div className="inline-flex items-center gap-3.5 pl-4 pr-[22px] py-4 rounded-[18px] bg-white/66 backdrop-blur-md border border-black/6 shadow-[0_8px_30px_rgba(10,20,24,0.05)]">
-      <span className="w-10 h-10 rounded-xl flex items-center justify-center bg-[linear-gradient(140deg,rgba(28,169,201,.14),rgba(99,102,241,.1))]">
-        <Icon className="w-[19px] h-[19px] text-aqua-deep" />
-      </span>
+    <div className="inline-flex items-center gap-3.5 pl-4 pr-[22px] py-4 rounded-full bg-white/66 backdrop-blur-md border border-black/6 shadow-[0_8px_30px_rgba(10,20,24,0.05)]">
+      <IconBadge icon={Icon} size={40} iconSize={18} />
       <span className="flex flex-col leading-tight">
         <span className="text-[14.5px] font-semibold text-ink tracking-[-0.01em]">{title}</span>
         <span className="text-[12.5px] text-ink-soft">{sub}</span>

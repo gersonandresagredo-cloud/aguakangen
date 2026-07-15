@@ -10,7 +10,7 @@ import { useUI } from '../lib/UIContext';
 export default function FinalCTA() {
   const { openChat } = useUI();
   return (
-    <section className="relative bg-dark text-white px-5 sm:px-10 lg:px-20 py-[clamp(90px,12vw,170px)] overflow-hidden text-center rounded-t-[28px] sm:rounded-t-[60px]">
+    <section className="relative bg-dark text-white px-6 sm:px-10 lg:px-20 py-[clamp(90px,12vw,170px)] overflow-hidden text-center rounded-t-[28px] sm:rounded-t-[60px]">
       <Halo className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(900px,120vw)] h-[min(700px,90vw)]" speed={0.1} />
       <BubbleField />
       <div className="relative max-w-[820px] mx-auto z-2">

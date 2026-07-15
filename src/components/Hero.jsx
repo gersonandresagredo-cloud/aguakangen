@@ -22,7 +22,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen bg-dark text-white flex items-center overflow-hidden px-5 sm:px-10 lg:px-20 pt-[90px] pb-[90px] rounded-b-[28px] sm:rounded-b-[60px]"
+      className="relative min-h-screen bg-dark text-white flex items-center overflow-hidden px-6 sm:px-10 lg:px-20 pt-[90px] pb-[90px] rounded-b-[28px] sm:rounded-b-[60px]"
     >
       <Halo speed={0.18} className="-top-[10%] -right-[8%] w-[min(760px,90vw)] h-[min(760px,90vw)]" />
       <Halo

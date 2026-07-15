@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import Reveal from './Reveal';
 import Halo from './Halo';
 import { useIsMobile } from '../lib/hooks';
@@ -11,12 +10,29 @@ const ROWS = [
 
 function Row({ n, title, text, delay, last }) {
   const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return (
+      <Reveal
+        delay={delay}
+        data-cursor="hover"
+        className={`flex flex-col gap-2.5 py-7 border-t border-black/8 ${last ? 'border-b' : ''}`}
+      >
+        <div className="flex items-baseline gap-3">
+          <span className="font-mono text-[12px] tracking-wide text-aqua">{n}</span>
+          <h3 className="text-[21px] leading-[1.15] tracking-[-0.02em] text-ink">{title}</h3>
+        </div>
+        <p className="text-[15px] leading-[1.6] text-ink-soft">{text}</p>
+      </Reveal>
+    );
+  }
+
   return (
     <Reveal
       delay={delay}
       data-cursor="hover"
-      className={`grid gap-4 sm:gap-8 lg:gap-12 items-baseline py-6 sm:py-9 lg:py-10 border-t border-black/10 ${last ? 'border-b' : ''}`}
-      style={{ gridTemplateColumns: isMobile ? '34px 1fr' : '64px 0.95fr 1.05fr' }}
+      className={`grid sm:gap-8 lg:gap-12 items-baseline py-9 lg:py-10 border-t border-black/10 ${last ? 'border-b' : ''}`}
+      style={{ gridTemplateColumns: '64px 0.95fr 1.05fr' }}
       whileHover={{ paddingLeft: 14 }}
       transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
     >
@@ -29,7 +45,7 @@ function Row({ n, title, text, delay, last }) {
 
 export default function Problem() {
   return (
-    <section id="problema" className="relative bg-bg-light px-5 sm:px-10 lg:px-20 py-[clamp(80px,10vw,150px)] overflow-hidden">
+    <section id="problema" className="relative bg-bg-light px-6 sm:px-10 lg:px-20 py-[clamp(72px,10vw,150px)] overflow-hidden">
       <Halo
         speed={0.16}
         pulse={false}
@@ -42,11 +58,11 @@ export default function Problem() {
         <Reveal as="span" className="block text-[11px] font-semibold tracking-[.24em] uppercase text-aqua-deep">
           Lo que no ves en tu vaso
         </Reveal>
-        <Reveal delay={80} as="h2" className="mt-[18px] max-w-[900px] text-[clamp(30px,5vw,60px)] leading-[1.02] text-ink">
+        <Reveal delay={80} as="h2" className="mt-[18px] max-w-[900px] text-[clamp(28px,5vw,60px)] leading-[1.08] sm:leading-[1.02] text-ink">
           El <span className="text-aqua">90%</span> de lo que bebes trabaja en tu contra.
         </Reveal>
 
-        <div className="mt-[clamp(44px,6vw,80px)] flex flex-col">
+        <div className="mt-10 sm:mt-[clamp(44px,6vw,80px)] flex flex-col">
           {ROWS.map((r, i) => (
             <Row key={r.n} {...r} delay={i * 100} last={i === ROWS.length - 1} />
           ))}
@@ -54,8 +70,8 @@ export default function Problem() {
 
         <Reveal
           as="p"
-          className="mt-[clamp(44px,6vw,70px)] max-w-[820px] font-display font-medium text-ink"
-          style={{ fontSize: 'clamp(22px,3vw,34px)', lineHeight: 1.2, letterSpacing: '-0.03em' }}
+          className="mt-10 sm:mt-[clamp(44px,6vw,70px)] max-w-[820px] font-display font-medium text-ink"
+          style={{ fontSize: 'clamp(21px,3vw,34px)', lineHeight: 1.28, letterSpacing: '-0.02em' }}
         >
           No es una cuestión de sed. Es una cuestión de <span className="text-aqua">cómo quieres envejecer.</span>
         </Reveal>

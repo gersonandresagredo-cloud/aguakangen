@@ -61,7 +61,7 @@ export default function FAQ() {
   const all = [...ITEMS, { q: '¿Cómo la pruebo?', a: null }];
 
   return (
-    <section className="relative bg-bg-light px-5 sm:px-10 lg:px-20 py-[clamp(80px,10vw,150px)]">
+    <section className="relative bg-bg-light px-6 sm:px-10 lg:px-20 py-[clamp(80px,10vw,150px)]">
       <div className="max-w-[820px] mx-auto">
         <Reveal as="span" className="block text-[11px] font-semibold tracking-[.24em] uppercase text-aqua-deep">Tus dudas</Reveal>
         <Reveal delay={80} as="h2" className="mt-4 text-[clamp(30px,5vw,54px)] leading-[1.02] text-ink">

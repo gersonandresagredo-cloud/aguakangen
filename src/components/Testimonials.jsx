@@ -29,7 +29,7 @@ export default function Testimonials() {
   }, []);
 
   return (
-    <section id="testimonios" className="relative bg-dark text-white px-5 sm:px-10 lg:px-20 py-[clamp(80px,10vw,150px)] overflow-hidden rounded-[28px] sm:rounded-[60px]">
+    <section id="testimonios" className="relative bg-dark text-white px-6 sm:px-10 lg:px-20 py-[clamp(80px,10vw,150px)] overflow-hidden rounded-[28px] sm:rounded-[60px]">
       <BubbleField />
       <div className="relative max-w-[1120px] mx-auto z-2">
         <div className="grid gap-6 text-center" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%,220px), 1fr))' }}>

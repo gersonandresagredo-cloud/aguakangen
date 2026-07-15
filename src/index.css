@@ -18,6 +18,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Iconos más finos y delicados en toda la web (menos "clip-art", más premium). */
+svg[stroke="currentColor"] {
+  stroke-width: 1.6;
+}
+
 * {
   box-sizing: border-box;
 }

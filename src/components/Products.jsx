@@ -2,6 +2,7 @@ import { Power, RefreshCw, Bell, ShowerHead, Heart, Wrench, Fingerprint, BadgeCh
 import Reveal from './Reveal';
 import Parallax from './Parallax';
 import GradientPillButton from './GradientPillButton';
+import IconBadge from './IconBadge';
 import { useUI } from '../lib/UIContext';
 import { useIsMobile } from '../lib/hooks';
 
@@ -82,10 +83,10 @@ function ProductCard({ p, first }) {
             </div>
           ))}
         </Reveal>
-        <Reveal delay={220} className="mt-4 flex flex-wrap gap-3.5 text-[13px] text-ink-soft">
+        <Reveal delay={220} className="mt-5 flex flex-col sm:flex-row sm:flex-wrap gap-2.5 sm:gap-x-5 text-[13.5px] text-ink-soft">
           {p.features.map((f) => (
-            <span key={f.t} className="inline-flex items-center gap-1.5">
-              <f.icon className="w-3.5 h-3.5 text-aqua" />{f.t}
+            <span key={f.t} className="inline-flex items-center gap-2.5">
+              <IconBadge icon={f.icon} size={28} iconSize={13} />{f.t}
             </span>
           ))}
         </Reveal>
@@ -106,7 +107,7 @@ function ProductCard({ p, first }) {
 
 export default function Products() {
   return (
-    <section id="productos" className="relative bg-bg-light px-5 sm:px-10 lg:px-20 py-[clamp(80px,10vw,150px)] overflow-hidden">
+    <section id="productos" className="relative bg-bg-light px-6 sm:px-10 lg:px-20 py-[clamp(80px,10vw,150px)] overflow-hidden">
       <div className="max-w-[1120px] mx-auto">
         <Reveal as="span" className="block text-[11px] font-semibold tracking-[.24em] uppercase text-aqua-deep">Los equipos</Reveal>
         <Reveal delay={80} as="h2" className="mt-[18px] max-w-[760px] text-[clamp(30px,5vw,56px)] leading-[1.02] text-ink">
@@ -119,9 +120,7 @@ export default function Products() {
 
         <Reveal className="mt-[clamp(48px,7vw,84px)] p-[clamp(24px,3.5vw,36px)] rounded-[22px] bg-white border border-black/6 flex flex-wrap items-center justify-between gap-[18px]">
           <div className="flex items-center gap-3.5">
-            <span className="w-11 h-11 rounded-2xl flex items-center justify-center flex-none bg-[linear-gradient(140deg,rgba(28,169,201,.12),rgba(99,102,241,.08))]">
-              <BadgeCheck className="w-[21px] h-[21px] text-aqua-deep" />
-            </span>
+            <IconBadge icon={BadgeCheck} size={44} iconSize={20} />
             <div>
               <div className="text-[15px] font-semibold tracking-[-0.01em] text-ink">Calidad certificada</div>
               <div className="mt-[3px] text-[13px] leading-[1.5] text-ink-soft max-w-[520px]">

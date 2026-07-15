@@ -6,7 +6,7 @@ export default function Footer() {
   const isMobile = useIsMobile();
 
   return (
-    <footer className="bg-dark-deep text-white/60 px-5 sm:px-10 lg:px-20 pt-[clamp(56px,8vw,96px)] pb-9">
+    <footer className="bg-dark-deep text-white/60 px-6 sm:px-10 lg:px-20 pt-[clamp(56px,8vw,96px)] pb-9">
       <div className="max-w-[1120px] mx-auto">
         <div className="grid gap-[clamp(32px,5vw,64px)] items-start" style={{ gridTemplateColumns: isMobile ? '1fr' : '1.4fr 0.6fr 0.8fr' }}>
           <div>

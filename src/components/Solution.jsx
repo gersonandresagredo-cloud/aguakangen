@@ -14,7 +14,7 @@ const STEPS = [
 export default function Solution() {
   const isMobile = useIsMobile();
   return (
-    <section id="solucion" className="relative bg-dark text-white px-5 sm:px-10 lg:px-20 py-[clamp(80px,10vw,150px)] overflow-hidden rounded-[28px] sm:rounded-[60px]">
+    <section id="solucion" className="relative bg-dark text-white px-6 sm:px-10 lg:px-20 py-[clamp(80px,10vw,150px)] overflow-hidden rounded-[28px] sm:rounded-[60px]">
       <Halo
         speed={0.2}
         pulse={false}

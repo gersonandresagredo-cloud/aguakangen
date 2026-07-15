@@ -1,12 +1,13 @@
 import { Camera, MessageCircle, HeartHandshake } from 'lucide-react';
 import Reveal from './Reveal';
 import Parallax from './Parallax';
+import IconBadge from './IconBadge';
 import { useIsMobile } from '../lib/hooks';
 
 export default function About() {
   const isMobile = useIsMobile();
   return (
-    <section id="sobre-mi" className="relative bg-white px-5 sm:px-10 lg:px-20 py-[clamp(80px,10vw,150px)] overflow-hidden">
+    <section id="sobre-mi" className="relative bg-white px-6 sm:px-10 lg:px-20 py-[clamp(80px,10vw,150px)] overflow-hidden">
       <div
         className="max-w-[1120px] mx-auto grid gap-[clamp(36px,5vw,72px)] items-center"
         style={{ gridTemplateColumns: isMobile ? '1fr' : '0.9fr 1.1fr' }}
@@ -33,14 +34,14 @@ export default function About() {
             Desde entonces acompaño a otras personas a dar el mismo paso, sin prisas y sin presión. <span className="text-ink font-medium">No vendo máquinas: comparto un cambio que viví.</span>
           </Reveal>
           <Reveal delay={300} className="mt-7 flex flex-wrap items-center gap-3">
-            <a href="#" data-cursor="hover" className="inline-flex items-center gap-2 px-[18px] py-3 rounded-[13px] bg-bg-light text-ink text-[14.5px] font-medium">
-              <Camera className="w-[17px] h-[17px] text-aqua-deep" />Instagram
+            <a href="#" data-cursor="hover" className="inline-flex items-center gap-2.5 pl-3 pr-[18px] py-2.5 rounded-full bg-bg-light text-ink text-[14px] font-medium">
+              <IconBadge icon={Camera} size={26} iconSize={13} />Instagram
             </a>
-            <a href="#" data-cursor="hover" className="inline-flex items-center gap-2 px-[18px] py-3 rounded-[13px] bg-bg-light text-ink text-[14.5px] font-medium">
-              <MessageCircle className="w-[17px] h-[17px] text-aqua-deep" />WhatsApp
+            <a href="#" data-cursor="hover" className="inline-flex items-center gap-2.5 pl-3 pr-[18px] py-2.5 rounded-full bg-bg-light text-ink text-[14px] font-medium">
+              <IconBadge icon={MessageCircle} size={26} iconSize={13} />WhatsApp
             </a>
-            <span className="inline-flex items-center gap-2 text-[14.5px] text-ink-soft">
-              <HeartHandshake className="w-[17px] h-[17px] text-aqua" />+320 familias acompañadas
+            <span className="inline-flex items-center gap-2.5 text-[14px] text-ink-soft">
+              <IconBadge icon={HeartHandshake} size={26} iconSize={13} />+320 familias acompañadas
             </span>
           </Reveal>
         </div>

@@ -31,7 +31,7 @@ export default function About() {
             Hace unos años decidí cambiar el agua que bebía en casa: quería algo de verdadera calidad y dejar atrás el plástico de las botellas.
           </Reveal>
           <Reveal delay={220} as="p" className="mt-4 text-[clamp(16px,1.9vw,18px)] leading-[1.65] text-ink-soft">
-            Lo que no imaginé fue todo lo que ese cambio traería con él: más energía, mejor digestión, la sensación real de estar cuidando mi cuerpo cada día.
+            Lo que no imaginé fue todo lo que ese cambio traería con el paso del tiempo: más energía, mejor digestión, la sensación real de estar cuidando mi cuerpo cada día.
           </Reveal>
           <Reveal delay={280} as="p" className="mt-4 text-[clamp(16px,1.9vw,18px)] leading-[1.65] text-ink-soft">
             Desde entonces acompaño a otras personas a dar ese mismo paso. Porque a veces el mayor cambio en tu bienestar no viene de algo complicado, sino de algo tan cotidiano como el agua que bebes.

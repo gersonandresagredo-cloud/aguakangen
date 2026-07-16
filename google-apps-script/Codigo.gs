@@ -17,7 +17,7 @@ var NOMBRE_HOJA = 'Reservas';
 // ID de la hoja de cálculo (lo saca de la URL de tu hoja de Google, entre
 // /d/ y /edit). Déjalo vacío '' solo si el script está pegado DENTRO de la
 // hoja (Extensiones → Apps Script). Si dudas, rellénalo: funciona siempre.
-var SHEET_ID = '';
+var SHEET_ID = '1qP2VbVnd1RifJHIQvuZRD4I-hNdTvIGErdsWn9vcyf8';
 var NOMBRE_CALENDARIO = 'Agenda de aguakangen';
 var ZONA_HORARIA = 'Europe/Madrid';
 var HORA_INICIO = 16;      // 16:00

@@ -1,5 +1,10 @@
+import { Camera, Music2 } from 'lucide-react';
 import { useUI } from '../lib/UIContext';
 import { useIsMobile } from '../lib/hooks';
+import SocialButton from './SocialButton';
+
+const INSTAGRAM_URL = 'https://www.instagram.com/soy.aguakangen/';
+const TIKTOK_URL = 'https://www.tiktok.com/@soy.aguakangen';
 
 export default function Footer() {
   const { openLegal } = useUI();
@@ -18,7 +23,22 @@ export default function Footer() {
           </div>
           <div className="flex flex-col gap-3">
             <span className="text-[11px] font-semibold tracking-[.22em] uppercase text-white/35">Social</span>
-            <a href="#" data-cursor="hover" className="text-white/70 text-sm w-fit">Instagram</a>
+            <div className="flex flex-col gap-2.5 items-start">
+              <SocialButton
+                href={INSTAGRAM_URL}
+                icon={Camera}
+                label="Instagram"
+                gradient="linear-gradient(135deg,#f6a13c,#e0457b 45%,#7b4ec9)"
+                dark
+              />
+              <SocialButton
+                href={TIKTOK_URL}
+                icon={Music2}
+                label="TikTok"
+                gradient="linear-gradient(135deg,#0A1418,#1CA9C9 55%,#7FE0F0)"
+                dark
+              />
+            </div>
           </div>
           <div className="flex flex-col gap-3">
             <span className="text-[11px] font-semibold tracking-[.22em] uppercase text-white/35">Legal</span>

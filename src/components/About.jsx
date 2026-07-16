@@ -1,8 +1,12 @@
-import { Camera, MessageCircle, HeartHandshake } from 'lucide-react';
+import { Camera, Music2, HeartHandshake } from 'lucide-react';
 import Reveal from './Reveal';
 import Parallax from './Parallax';
 import IconBadge from './IconBadge';
+import SocialButton from './SocialButton';
 import { useIsMobile } from '../lib/hooks';
+
+const INSTAGRAM_URL = 'https://www.instagram.com/soy.aguakangen/';
+const TIKTOK_URL = 'https://www.tiktok.com/@soy.aguakangen';
 
 export default function About() {
   const isMobile = useIsMobile();
@@ -37,12 +41,18 @@ export default function About() {
             Desde entonces acompaño a otras personas a dar ese mismo paso. Porque a veces el mayor cambio en tu bienestar no viene de algo complicado, sino de algo tan cotidiano como el agua que bebes.
           </Reveal>
           <Reveal delay={340} className="mt-7 flex flex-wrap items-center gap-3">
-            <a href="#" data-cursor="hover" className="inline-flex items-center gap-2.5 pl-3 pr-[18px] py-2.5 rounded-full bg-bg-light text-ink text-[14px] font-medium">
-              <IconBadge icon={Camera} size={26} iconSize={13} />Instagram
-            </a>
-            <a href="#" data-cursor="hover" className="inline-flex items-center gap-2.5 pl-3 pr-[18px] py-2.5 rounded-full bg-bg-light text-ink text-[14px] font-medium">
-              <IconBadge icon={MessageCircle} size={26} iconSize={13} />WhatsApp
-            </a>
+            <SocialButton
+              href={INSTAGRAM_URL}
+              icon={Camera}
+              label="Instagram"
+              gradient="linear-gradient(135deg,#f6a13c,#e0457b 45%,#7b4ec9)"
+            />
+            <SocialButton
+              href={TIKTOK_URL}
+              icon={Music2}
+              label="TikTok"
+              gradient="linear-gradient(135deg,#0A1418,#1CA9C9 55%,#7FE0F0)"
+            />
             <span className="inline-flex items-center gap-2.5 text-[14px] text-ink-soft">
               <IconBadge icon={HeartHandshake} size={26} iconSize={13} />+320 familias acompañadas
             </span>

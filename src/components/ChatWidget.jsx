@@ -5,12 +5,12 @@ import { useUI } from '../lib/UIContext';
 import { useIsMobile } from '../lib/hooks';
 import RaquelAvatar from './RaquelAvatar';
 
-const GOALS = ['Más energía', 'Dejar el plástico', 'Salud de mi familia', 'Solo curiosidad'];
+const GOALS = ['Cuidar mi salud', 'Adelgazar / más energía', 'Salud de mi familia', 'Ahorrar en botellas'];
 const GOAL_SELL = {
-  'Más energía': 'Buenísima elección ⚡ Es justo lo primero que nota la gente: mañanas más ligeras. En la demo lo compruebas tú misma, en directo y con tu propia agua.',
-  'Dejar el plástico': 'Me encanta 🌊 Una familia media tira cientos de botellas al año. En la demo te enseño cómo eliminarlas de tu vida desde el primer día.',
-  'Salud de mi familia': 'La mejor razón de todas 💙 En la demo ves los distintos tipos de agua para beber, cocinar y para los peques. 15 minutos que cambian la rutina de casa.',
-  'Solo curiosidad': 'La curiosidad es como empezamos todos 😉 Sin discursos: agua funcionando en directo delante de ti. Luego decides tú.',
+  'Cuidar mi salud': 'Has dado en el clavo 💧 Justo eso es lo que trabajamos en la presentación: te muestro en directo cómo cambia el agua y qué significa para tu cuerpo. Reservemos ya tu hueco.',
+  'Adelgazar / más energía': 'Perfecto ⚡ Es lo primero que nota la gente. En la presentación lo ves funcionando en vivo y te digo exactamente cómo encajarlo en tu día. Vamos a agendarla.',
+  'Salud de mi familia': 'La mejor razón que hay 💙 En la presentación te enseño los tipos de agua para beber, cocinar y los peques. Son 15 minutos que cambian la casa. Cerremos tu cita.',
+  'Ahorrar en botellas': 'Cuentas claras 🌊 Una familia gasta cientos de euros al año en botellas. En la presentación te enseño cómo eliminarlo. Reservemos tu hueco y te lo cuento.',
 };
 
 // === Envío de la reserva ===
@@ -77,15 +77,15 @@ export default function ChatWidget() {
   const pushUser = (text) => setMessages((m) => [...m, { id: ++midRef.current, from: 'user', text }]);
 
   const startConversation = () => {
-    pushBot('¡Hola! Soy Raquel 💧 Vamos a algo simple: reservarte una videollamada de 15 minutos donde verás el agua funcionando en directo.', null, 500);
-    pushBot('Cuéntame, ¿qué es lo que más te mueve?', 1, 1700);
+    pushBot('¡Hola! Soy Raquel 💧 Encantada de conocerte. Reservo esta semana las últimas presentaciones en directo (15 min, gratis y sin compromiso).', null, 500);
+    pushBot('Para dejarte el mejor hueco, dime rápido: ¿qué es lo que más te interesa mejorar?', 1, 1700);
   };
 
   const selectGoal = (g) => {
     setGoal(g);
     pushUser(g);
     pushBot(GOAL_SELL[g] || '¡Genial!', null, 900);
-    pushBot('Los huecos de esta semana vuelan. Para reservarte uno, ¿cómo te llamas?', 2, 2100);
+    pushBot('Los huecos de esta semana vuelan y voy cerrando por orden. Para apartarte el tuyo, ¿cómo te llamas?', 2, 2100);
   };
 
   const submitText = (e) => {
@@ -95,10 +95,10 @@ export default function ChatWidget() {
     pushUser(v);
     if (step === 2) {
       setName(v); setTextVal('');
-      pushBot(`Encantado, ${v} 🙌 Déjame un teléfono o email para confirmarte la cita.`, 3, 900);
+      pushBot(`¡Un placer, ${v}! 🙌 Déjame un WhatsApp o email y te confirmo el hueco en menos de lo que crees.`, 3, 900);
     } else if (step === 3) {
       setContact(v); setTextVal('');
-      pushBot('Perfecto. ¿Cuándo te viene mejor?', 4, 900);
+      pushBot('Genial, ya casi está. Última cosa: ¿cuándo te viene mejor y te lo bloqueo?', 4, 900);
     }
   };
 
@@ -106,7 +106,7 @@ export default function ChatWidget() {
     if (!day || !franja) return;
     pushUser(`${day} · ${franja}`);
     onBooking({ goal, name, contact, day, franja, at: new Date().toISOString() });
-    pushBot(`¡Listo, ${name}! ✅ Tu demostración queda solicitada para ${day.toLowerCase()} por la ${franja.toLowerCase()}. Te escribiré a "${contact}" para cerrar la hora exacta.`, 5, 900);
+    pushBot(`¡Hecho, ${name}! ✅ Te reservo la presentación para ${day.toLowerCase()} por la ${franja.toLowerCase()}. Te escribo a "${contact}" para darte la hora exacta. Vas a flipar con lo que verás 💧`, 5, 900);
   };
 
   const subtitle = step >= 5 ? '✓ Cita solicitada' : step >= 1 ? `Paso ${Math.min(3, step)} de 3 · reservando tu demo` : '● En línea · responde al instante';

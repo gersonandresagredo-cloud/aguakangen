@@ -36,8 +36,17 @@ export default function GradientPillButton({
       className={`relative overflow-hidden border-0 p-[1.5px] rounded-full cursor-pointer bg-[linear-gradient(115deg,rgba(28,169,201,.9),rgba(14,122,147,.4)_45%,rgba(99,102,241,.8))] ${className}`}
       style={{ boxShadow: glow }}
     >
-      <span className={`relative flex items-center rounded-full ${innerClassName}`}>
-        {children}
+      <span className={`relative flex items-center rounded-full overflow-hidden ${innerClassName}`}>
+        {/* brillo que barre sutilmente el botón */}
+        <span
+          aria-hidden
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'linear-gradient(105deg, transparent 30%, rgba(127,224,240,.22) 48%, transparent 66%)',
+            animation: 'btnSheen 5.5s ease-in-out infinite',
+          }}
+        />
+        <span className="relative flex items-center">{children}</span>
       </span>
       <AnimatePresence>
         {ripples.map((r) => (

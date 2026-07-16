@@ -1,5 +1,6 @@
+import { useEffect } from 'react';
 import { ArrowUpRight, Play } from 'lucide-react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import Halo from './Halo';
 import BubbleField from './BubbleField';
 import Parallax from './Parallax';
@@ -59,6 +60,25 @@ export default function Hero() {
   const wordOpacity = useTransform(scrollY, [0, 900], [1, 0]);
   const machineY = useTransform(scrollY, [0, 2000], [0, 760]);
   const machineScale = useTransform(scrollY, [0, 1000], [1, 0.82]);
+
+  // La máquina sigue suavemente el ratón (leve inclinación 3D) en escritorio.
+  const pointerX = useMotionValue(0);
+  const pointerY = useMotionValue(0);
+  const smoothX = useSpring(pointerX, { stiffness: 45, damping: 18 });
+  const smoothY = useSpring(pointerY, { stiffness: 45, damping: 18 });
+  const tiltTranslateX = useTransform(smoothX, [-1, 1], [24, -24]);
+  const tiltRotateY = useTransform(smoothX, [-1, 1], [-6, 6]);
+  const tiltRotateX = useTransform(smoothY, [-1, 1], [4.5, -4.5]);
+
+  useEffect(() => {
+    if (stacked) return;
+    const onMove = (e) => {
+      pointerX.set((e.clientX / window.innerWidth - 0.5) * 2);
+      pointerY.set((e.clientY / window.innerHeight - 0.5) * 2);
+    };
+    window.addEventListener('mousemove', onMove);
+    return () => window.removeEventListener('mousemove', onMove);
+  }, [stacked, pointerX, pointerY]);
 
   // El badge está por encima del pliegue: se anima al cargar (no con whileInView,
   // que con el margen negativo no llega a dispararse tan arriba).
@@ -148,6 +168,7 @@ export default function Hero() {
         <div className="relative z-2 w-full max-w-[520px] flex flex-col items-center text-center">
           {badge}
           <RevealWords
+            trigger="mount"
             className="font-display font-medium leading-[1.1] tracking-[-0.025em]"
             style={{ fontSize: 'clamp(30px,7.5vw,44px)' }}
             words={TITLE_WORDS}
@@ -186,9 +207,9 @@ export default function Hero() {
       {/* máquina centrada */}
       <div
         className="absolute z-1 pointer-events-none"
-        style={{ top: '52%', left: '50%', width: 'min(740px, 94vw)', transform: 'translate(-50%, -50%)' }}
+        style={{ top: '52%', left: '50%', width: 'min(740px, 94vw)', transform: 'translate(-50%, -50%)', perspective: '1400px' }}
       >
-        <motion.div style={{ y: machineY, scale: machineScale }}>
+        <motion.div style={{ y: machineY, scale: machineScale, x: tiltTranslateX, rotateX: tiltRotateX, rotateY: tiltRotateY, transformStyle: 'preserve-3d' }}>
           <MachineVisual width="100%" />
         </motion.div>
       </div>
@@ -198,6 +219,7 @@ export default function Hero() {
         <Parallax speed={-0.1} className="max-w-[400px]">
           {badge}
           <RevealWords
+            trigger="mount"
             className="font-display font-medium leading-[1.12] tracking-[-0.025em]"
             style={{ fontSize: 'clamp(26px,3vw,40px)' }}
             words={TITLE_WORDS}

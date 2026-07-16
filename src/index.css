@@ -106,6 +106,10 @@ html.kangen-no-native-cursor * {
   60% { transform: scale(1.18); }
   100% { transform: scale(1); }
 }
+@keyframes btnSheen {
+  0% { transform: translateX(-120%); }
+  55%, 100% { transform: translateX(120%); }
+}
 
 /*
   Nota: NO forzamos animation-duration global bajo prefers-reduced-motion.

@@ -13,9 +13,18 @@ const GOAL_SELL = {
   'Ahorrar en botellas': 'Cuentas claras 🌊 Una familia gasta cientos de euros al año en botellas. En la presentación te enseño cómo eliminarlo. Reservemos tu hueco y te lo cuento.',
 };
 
-// === Envío de la reserva ===
-// La reserva se manda a un Google Apps Script (ver carpeta google-apps-script/),
-// que la guarda en una hoja de Google (Drive) y avisa por email a Raquel.
+// === Reglas del horario (deben coincidir con google-apps-script/Codigo.gs) ===
+const START_HOUR = 16;
+const END_HOUR = 20;
+const SLOT_MINUTES = 15;
+const WORK_DAYS = [1, 2, 3, 4, 5]; // lunes–viernes
+const MIN_LEAD_HOURS = 48;
+const LOOKAHEAD_DAYS = 14;
+
+// === Envío / lectura de la reserva ===
+// Todo pasa por un Google Apps Script (ver carpeta google-apps-script/) que:
+//  - GET  ?action=slots → consulta el calendario real y devuelve huecos libres.
+//  - POST                → crea el evento con Meet, avisa a Raquel y guarda la fila.
 // La URL se configura en el archivo .env → VITE_BOOKING_ENDPOINT.
 const BOOKING_ENDPOINT = import.meta.env.VITE_BOOKING_ENDPOINT || '';
 
@@ -35,6 +44,62 @@ function onBooking(payload) {
   }).catch((err) => console.error('[onBooking] no se pudo enviar la reserva:', err));
 }
 
+// Genera los mismos huecos que calcularía el backend, para usarlos como
+// vista previa en modo demo (sin VITE_BOOKING_ENDPOINT configurado).
+function demoSlots() {
+  const now = new Date();
+  const minStart = new Date(now.getTime() + MIN_LEAD_HOURS * 60 * 60 * 1000);
+  const rangeStart = new Date();
+  rangeStart.setHours(0, 0, 0, 0);
+  const slots = [];
+  for (let d = 0; d <= LOOKAHEAD_DAYS; d++) {
+    const day = new Date(rangeStart.getTime());
+    day.setDate(day.getDate() + d);
+    if (!WORK_DAYS.includes(day.getDay())) continue;
+    const totalMinutes = (END_HOUR - START_HOUR) * 60;
+    for (let m = 0; m < totalMinutes; m += SLOT_MINUTES) {
+      const start = new Date(day.getFullYear(), day.getMonth(), day.getDate(), START_HOUR, 0, 0);
+      start.setMinutes(start.getMinutes() + m);
+      if (start < minStart) continue;
+      slots.push({ start: start.toISOString() });
+    }
+    if (slots.length >= 60) break;
+  }
+  return slots;
+}
+
+async function fetchSlots() {
+  if (!BOOKING_ENDPOINT) return demoSlots();
+  try {
+    const res = await fetch(`${BOOKING_ENDPOINT}?action=slots`);
+    const data = await res.json();
+    return Array.isArray(data.slots) ? data.slots : [];
+  } catch (err) {
+    console.error('[fetchSlots] no se pudieron cargar los huecos:', err);
+    return demoSlots();
+  }
+}
+
+function groupSlotsByDay(slots) {
+  const map = new Map();
+  slots.forEach((s) => {
+    const dt = new Date(s.start);
+    const key = dt.toDateString();
+    if (!map.has(key)) {
+      map.set(key, {
+        key,
+        dayLabel: dt.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' }),
+        times: [],
+      });
+    }
+    map.get(key).times.push({
+      start: s.start,
+      timeLabel: dt.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+    });
+  });
+  return Array.from(map.values());
+}
+
 export default function ChatWidget() {
   const { chatOpen, closeChat, toggleChat } = useUI();
   const isMobile = useIsMobile();
@@ -42,17 +107,34 @@ export default function ChatWidget() {
 
   const [messages, setMessages] = useState([]);
   const [typing, setTyping] = useState(false);
-  const [step, setStep] = useState(0); // 0 idle, 1 goals, 2 name, 3 contact, 4 schedule, 5 done
+  const [step, setStep] = useState(0); // 0 idle, 1 goals, 2 name, 3 whatsapp, 4 email, 5 schedule, 6 done
   const [goal, setGoal] = useState(null);
   const [name, setName] = useState('');
-  const [contact, setContact] = useState('');
-  const [day, setDay] = useState(null);
-  const [franja, setFranja] = useState(null);
+  const [whatsapp, setWhatsapp] = useState('');
+  const [email, setEmail] = useState('');
+  const [slotGroups, setSlotGroups] = useState([]);
+  const [slotsLoading, setSlotsLoading] = useState(false);
+  const [selectedDay, setSelectedDay] = useState(null);
+  const [selectedSlot, setSelectedSlot] = useState(null);
   const [textVal, setTextVal] = useState('');
 
   const midRef = useRef(0);
   const startedRef = useRef(false);
   const scrollRef = useRef(null);
+
+  useEffect(() => {
+    if (step !== 5) return;
+    let cancelled = false;
+    setSlotsLoading(true);
+    fetchSlots().then((slots) => {
+      if (cancelled) return;
+      const groups = groupSlotsByDay(slots);
+      setSlotGroups(groups);
+      setSelectedDay(groups[0]?.key || null);
+      setSlotsLoading(false);
+    });
+    return () => { cancelled = true; };
+  }, [step]);
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -92,26 +174,33 @@ export default function ChatWidget() {
     e.preventDefault();
     const v = textVal.trim();
     if (!v) return;
+    if (step === 4 && !v.includes('@')) return; // email básico
     pushUser(v);
     if (step === 2) {
       setName(v); setTextVal('');
-      pushBot(`¡Un placer, ${v}! 🙌 Déjame un WhatsApp o email y te confirmo el hueco en menos de lo que crees.`, 3, 900);
+      pushBot(`¡Un placer, ${v}! 🙌 Para bloquearte el hueco te escribo por WhatsApp, ¿me pasas tu número?`, 3, 900);
     } else if (step === 3) {
-      setContact(v); setTextVal('');
-      pushBot('Genial, ya casi está. Última cosa: ¿cuándo te viene mejor y te lo bloqueo?', 4, 900);
+      setWhatsapp(v); setTextVal('');
+      pushBot('Perfecto. Y para mandarte la confirmación con el enlace de la videollamada, ¿tu email?', 4, 900);
+    } else if (step === 4) {
+      setEmail(v); setTextVal('');
+      pushBot('Genial, ya casi está. Elige el hueco que mejor te venga de mi agenda real 👇', 5, 900);
     }
   };
 
   const confirmBooking = () => {
-    if (!day || !franja) return;
-    pushUser(`${day} · ${franja}`);
-    onBooking({ goal, name, contact, day, franja, at: new Date().toISOString() });
-    pushBot(`¡Hecho, ${name}! ✅ Te reservo la presentación para ${day.toLowerCase()} por la ${franja.toLowerCase()}. Te escribo a "${contact}" para darte la hora exacta. Vas a flipar con lo que verás 💧`, 5, 900);
+    if (!selectedSlot) return;
+    const dt = new Date(selectedSlot);
+    const label = dt.toLocaleString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
+    pushUser(label);
+    onBooking({ goal, name, whatsapp, email, slot: selectedSlot, at: new Date().toISOString() });
+    pushBot(`¡Hecho, ${name}! ✅ Te reservo la presentación para ${label}. En breve te llega un email a "${email}" con la confirmación y el enlace de Meet. Vas a flipar con lo que verás 💧`, 6, 900);
   };
 
-  const subtitle = step >= 5 ? '✓ Cita solicitada' : step >= 1 ? `Paso ${Math.min(3, step)} de 3 · reservando tu demo` : '● En línea · responde al instante';
-  const progress = step >= 5 ? '100%' : step >= 4 ? '75%' : step >= 3 ? '50%' : step >= 2 ? '25%' : '8%';
-  const canConfirm = day && franja;
+  const subtitle = step >= 6 ? '✓ Cita solicitada' : step >= 1 ? `Paso ${Math.min(5, step)} de 5 · reservando tu demo` : '● En línea · responde al instante';
+  const progress = step >= 6 ? '100%' : step >= 5 ? '85%' : step >= 4 ? '65%' : step >= 3 ? '45%' : step >= 2 ? '25%' : '8%';
+  const canConfirm = !!selectedSlot;
+  const activeDayTimes = slotGroups.find((g) => g.key === selectedDay)?.times || [];
 
   return (
     <>
@@ -220,12 +309,13 @@ export default function ChatWidget() {
                   ))}
                 </div>
               )}
-              {chatOpen && (step === 2 || step === 3) && !typing && (
+              {chatOpen && (step === 2 || step === 3 || step === 4) && !typing && (
                 <form onSubmit={submitText} className="flex gap-2">
                   <input
                     value={textVal}
                     onChange={(e) => setTextVal(e.target.value)}
-                    placeholder={step === 2 ? 'Escribe tu nombre…' : 'Teléfono o email…'}
+                    type={step === 4 ? 'email' : 'text'}
+                    placeholder={step === 2 ? 'Escribe tu nombre…' : step === 3 ? 'Tu número de WhatsApp…' : 'Tu email…'}
                     className="flex-1 px-4 py-[13px] rounded-[13px] border border-white/14 bg-white/6 text-white text-[14.5px] outline-none"
                   />
                   <button type="submit" data-cursor="hover" className="flex-none w-[46px] rounded-[13px] border-0 flex items-center justify-center cursor-pointer text-white" style={{ background: 'linear-gradient(150deg,#1CA9C9,#0E7A93)' }}>
@@ -233,42 +323,59 @@ export default function ChatWidget() {
                   </button>
                 </form>
               )}
-              {chatOpen && step === 4 && !typing && (
+              {chatOpen && step === 5 && !typing && (
                 <div>
-                  <div className="text-xs text-white/50 mb-2">Día</div>
-                  <div className="flex flex-wrap gap-[7px] mb-3.5">
-                    {['Entre semana', 'Fin de semana'].map((d) => (
-                      <button
-                        key={d}
-                        onClick={() => setDay(d)}
-                        data-cursor="hover"
-                        className="px-4 py-2.5 rounded-[11px] border text-white text-[13.5px] cursor-pointer"
-                        style={{
-                          borderColor: day === d ? 'rgba(127,224,240,.6)' : 'rgba(255,255,255,.14)',
-                          background: day === d ? 'rgba(127,224,240,.2)' : 'rgba(255,255,255,.06)',
-                        }}
-                      >
-                        {d}
-                      </button>
-                    ))}
-                  </div>
-                  <div className="text-xs text-white/50 mb-2">Franja</div>
-                  <div className="flex flex-wrap gap-[7px]">
-                    {['Mañana', 'Tarde'].map((f) => (
-                      <button
-                        key={f}
-                        onClick={() => setFranja(f)}
-                        data-cursor="hover"
-                        className="px-4 py-2.5 rounded-[11px] border text-white text-[13.5px] cursor-pointer"
-                        style={{
-                          borderColor: franja === f ? 'rgba(127,224,240,.6)' : 'rgba(255,255,255,.14)',
-                          background: franja === f ? 'rgba(127,224,240,.2)' : 'rgba(255,255,255,.06)',
-                        }}
-                      >
-                        {f}
-                      </button>
-                    ))}
-                  </div>
+                  {slotsLoading ? (
+                    <div className="flex items-center gap-2 py-3 text-white/50 text-[13.5px]">
+                      <span className="flex gap-1">
+                        {[0, 0.15, 0.3].map((d) => (
+                          <span key={d} className="w-[6px] h-[6px] rounded-full bg-aqua-glow" style={{ animation: `typingDot 1.2s infinite ${d}s` }} />
+                        ))}
+                      </span>
+                      Consultando la agenda…
+                    </div>
+                  ) : slotGroups.length === 0 ? (
+                    <div className="py-3 text-white/60 text-[13.5px]">
+                      Ahora mismo no veo huecos libres. Escríbeme por WhatsApp al {whatsapp || 'número que me diste'} y te busco uno.
+                    </div>
+                  ) : (
+                    <>
+                      <div className="text-xs text-white/50 mb-2">Día</div>
+                      <div className="flex flex-wrap gap-[7px] mb-3.5 max-h-[74px] overflow-y-auto">
+                        {slotGroups.map((g) => (
+                          <button
+                            key={g.key}
+                            onClick={() => { setSelectedDay(g.key); setSelectedSlot(null); }}
+                            data-cursor="hover"
+                            className="px-3.5 py-2 rounded-[11px] border text-white text-[13px] cursor-pointer capitalize"
+                            style={{
+                              borderColor: selectedDay === g.key ? 'rgba(127,224,240,.6)' : 'rgba(255,255,255,.14)',
+                              background: selectedDay === g.key ? 'rgba(127,224,240,.2)' : 'rgba(255,255,255,.06)',
+                            }}
+                          >
+                            {g.dayLabel}
+                          </button>
+                        ))}
+                      </div>
+                      <div className="text-xs text-white/50 mb-2">Hora</div>
+                      <div className="flex flex-wrap gap-[7px] max-h-[110px] overflow-y-auto">
+                        {activeDayTimes.map((t) => (
+                          <button
+                            key={t.start}
+                            onClick={() => setSelectedSlot(t.start)}
+                            data-cursor="hover"
+                            className="px-3.5 py-2 rounded-[11px] border text-white text-[13.5px] cursor-pointer"
+                            style={{
+                              borderColor: selectedSlot === t.start ? 'rgba(127,224,240,.6)' : 'rgba(255,255,255,.14)',
+                              background: selectedSlot === t.start ? 'rgba(127,224,240,.2)' : 'rgba(255,255,255,.06)',
+                            }}
+                          >
+                            {t.timeLabel}
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  )}
                   <button
                     onClick={confirmBooking}
                     data-cursor="hover"
@@ -286,7 +393,7 @@ export default function ChatWidget() {
                   </button>
                 </div>
               )}
-              {chatOpen && step === 5 && !typing && (
+              {chatOpen && step === 6 && !typing && (
                 <div>
                   <div className="p-[18px] rounded-2xl border border-aqua-glow/35" style={{ background: 'linear-gradient(150deg,rgba(28,169,201,.16),rgba(14,122,147,.08))', boxShadow: '0 0 40px rgba(28,169,201,.18)' }}>
                     <div className="flex items-center gap-2.5 mb-3.5">
@@ -298,8 +405,14 @@ export default function ChatWidget() {
                     <div className="flex flex-col gap-[7px] text-[13px] text-white/75">
                       <div className="flex justify-between gap-3"><span className="text-white/45">Objetivo</span><span>{goal || '—'}</span></div>
                       <div className="flex justify-between gap-3"><span className="text-white/45">Nombre</span><span>{name || '—'}</span></div>
-                      <div className="flex justify-between gap-3"><span className="text-white/45">Contacto</span><span>{contact || '—'}</span></div>
-                      <div className="flex justify-between gap-3"><span className="text-white/45">Cuándo</span><span className="text-aqua-glow font-semibold">{day && franja ? `${day} · ${franja}` : '—'}</span></div>
+                      <div className="flex justify-between gap-3"><span className="text-white/45">WhatsApp</span><span>{whatsapp || '—'}</span></div>
+                      <div className="flex justify-between gap-3"><span className="text-white/45">Email</span><span>{email || '—'}</span></div>
+                      <div className="flex justify-between gap-3">
+                        <span className="text-white/45">Cuándo</span>
+                        <span className="text-aqua-glow font-semibold capitalize">
+                          {selectedSlot ? new Date(selectedSlot).toLocaleString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '—'}
+                        </span>
+                      </div>
                     </div>
                   </div>
                   <button onClick={closeChat} data-cursor="hover" className="mt-2.5 w-full py-[13px] rounded-[13px] border border-white/14 bg-white/6 text-white text-sm font-medium cursor-pointer">

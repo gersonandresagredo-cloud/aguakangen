@@ -85,7 +85,7 @@ function ProductCard({ p, first }) {
       </Reveal>
       <div>
         <Reveal className="flex items-center gap-2.5">
-          <span className="font-mono text-xs text-aqua">{p.n}</span>
+          <span className="font-display font-medium text-[13px] tracking-[0.02em] text-aqua">{p.n}</span>
           <span className="inline-flex items-center gap-1.5 px-[13px] py-1.5 rounded-full bg-aqua/10 text-aqua-deep text-xs font-semibold">{p.tag}</span>
         </Reveal>
         <Reveal delay={60} as="h3" className="mt-4 text-[clamp(28px,3.6vw,42px)] tracking-[-0.03em] text-ink">{p.name}</Reveal>

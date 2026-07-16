@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { Sparkles, X, Send, CalendarCheck, Check } from 'lucide-react';
+import { X, Send, CalendarCheck, Check } from 'lucide-react';
 import { useUI } from '../lib/UIContext';
 import { useIsMobile } from '../lib/hooks';
+import RaquelAvatar from './RaquelAvatar';
 
 const GOALS = ['Más energía', 'Dejar el plástico', 'Salud de mi familia', 'Solo curiosidad'];
 const GOAL_SELL = {
@@ -76,7 +77,7 @@ export default function ChatWidget() {
   const pushUser = (text) => setMessages((m) => [...m, { id: ++midRef.current, from: 'user', text }]);
 
   const startConversation = () => {
-    pushBot('¡Hola! Soy el asistente de Raquel 💧 Mi misión es simple: reservarte una videollamada de 15 minutos donde verás el agua funcionando en directo.', null, 500);
+    pushBot('¡Hola! Soy Raquel 💧 Vamos a algo simple: reservarte una videollamada de 15 minutos donde verás el agua funcionando en directo.', null, 500);
     pushBot('Cuéntame, ¿qué es lo que más te mueve?', 1, 1700);
   };
 
@@ -105,7 +106,7 @@ export default function ChatWidget() {
     if (!day || !franja) return;
     pushUser(`${day} · ${franja}`);
     onBooking({ goal, name, contact, day, franja, at: new Date().toISOString() });
-    pushBot(`¡Listo, ${name}! ✅ Tu demostración queda solicitada para ${day.toLowerCase()} por la ${franja.toLowerCase()}. Raquel te escribirá a "${contact}" para cerrar la hora exacta.`, 5, 900);
+    pushBot(`¡Listo, ${name}! ✅ Tu demostración queda solicitada para ${day.toLowerCase()} por la ${franja.toLowerCase()}. Te escribiré a "${contact}" para cerrar la hora exacta.`, 5, 900);
   };
 
   const subtitle = step >= 5 ? '✓ Cita solicitada' : step >= 1 ? `Paso ${Math.min(3, step)} de 3 · reservando tu demo` : '● En línea · responde al instante';
@@ -125,15 +126,12 @@ export default function ChatWidget() {
           boxShadow: '0 0 44px -8px rgba(28,169,201,.6),0 0 44px -12px rgba(99,102,241,.5),0 12px 40px rgba(0,0,0,.35)',
         }}
       >
-        <span className={`flex items-center gap-2.5 rounded-full ${isMobile ? 'p-[11px]' : 'pl-[11px] pr-[17px] py-[11px]'}`} style={{ background: 'rgba(7,16,19,.94)', backdropFilter: 'blur(20px) saturate(1.4)' }}>
-          <span className="relative w-[38px] h-[38px] rounded-full flex items-center justify-center bg-gradient-to-br from-aqua to-indigo-500">
-            <Sparkles className="w-[18px] h-[18px] text-white" />
-            <span className="absolute -bottom-px -right-px w-3 h-3 rounded-full bg-[#39d98a] border-2 border-dark" />
-          </span>
+        <span className={`flex items-center gap-2.5 rounded-full ${isMobile ? 'p-[7px]' : 'pl-[7px] pr-[18px] py-[7px]'}`} style={{ background: 'rgba(7,16,19,.94)', backdropFilter: 'blur(20px) saturate(1.4)' }}>
+          <RaquelAvatar size={44} dot ring />
           {!isMobile && (
             <span className="flex flex-col items-start leading-tight">
-              <span className="text-[13.5px] font-semibold text-white">Reserva tu videollamada</span>
-              <span className="text-[11px] text-aqua-glow">● 15 min · gratis · en línea</span>
+              <span className="text-[14px] font-semibold text-white">Hola, soy Raquel</span>
+              <span className="text-[11px] text-aqua-glow">● En línea · reserva tu demo</span>
             </span>
           )}
         </span>
@@ -159,12 +157,9 @@ export default function ChatWidget() {
             {/* header */}
             <div className="flex-none flex items-center justify-between gap-3 px-[18px] py-4 border-b border-white/8 bg-white/4">
               <div className="flex items-center gap-[11px]">
-                <span className="relative w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-aqua to-indigo-500">
-                  <Sparkles className="w-[19px] h-[19px] text-white" />
-                  <span className="absolute bottom-0 right-0 w-[11px] h-[11px] rounded-full bg-[#39d98a] border-2 border-dark" />
-                </span>
+                <RaquelAvatar size={40} dot />
                 <div className="leading-tight">
-                  <div className="text-[14.5px] font-semibold text-white">Asistente de Raquel</div>
+                  <div className="text-[14.5px] font-semibold text-white">Raquel Rodríguez</div>
                   <div className="text-[11.5px] text-aqua-glow">{subtitle}</div>
                 </div>
               </div>
@@ -187,11 +182,7 @@ export default function ChatWidget() {
                 const bot = m.from === 'bot';
                 return (
                   <div key={m.id} className={`flex items-end gap-2 ${bot ? 'justify-start' : 'justify-end'}`} style={{ animation: 'msgIn .35s cubic-bezier(.16,1,.3,1) both' }}>
-                    {bot && (
-                      <span className="flex-none w-[30px] h-[30px] rounded-full flex items-center justify-center self-end bg-gradient-to-br from-aqua to-indigo-500">
-                        <Sparkles className="w-[15px] h-[15px] text-white" />
-                      </span>
-                    )}
+                    {bot && <span className="self-end"><RaquelAvatar size={30} /></span>}
                     <div
                       className={`max-w-[80%] px-[15px] py-3 text-[14.5px] leading-[1.45] text-white ${bot ? 'rounded-[16px_16px_16px_4px]' : 'rounded-[16px_16px_4px_16px]'}`}
                       style={{ background: bot ? 'rgba(255,255,255,.08)' : 'linear-gradient(150deg,#1CA9C9,#0E7A93)' }}
@@ -203,9 +194,7 @@ export default function ChatWidget() {
               })}
               {typing && (
                 <div className="flex items-end gap-2" style={{ animation: 'msgIn .3s ease both' }}>
-                  <span className="flex-none w-[30px] h-[30px] rounded-full flex items-center justify-center bg-gradient-to-br from-aqua to-indigo-500">
-                    <Sparkles className="w-[15px] h-[15px] text-white" />
-                  </span>
+                  <RaquelAvatar size={30} />
                   <div className="flex gap-1 px-4 py-3.5 rounded-[16px_16px_16px_4px] bg-white/8">
                     {[0, 0.15, 0.3].map((d) => (
                       <span key={d} className="w-[7px] h-[7px] rounded-full bg-aqua-glow" style={{ animation: `typingDot 1.2s infinite ${d}s` }} />

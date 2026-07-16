@@ -19,7 +19,7 @@ function Row({ n, title, text, delay, last }) {
         className={`flex flex-col gap-2.5 py-7 border-t border-black/8 ${last ? 'border-b' : ''}`}
       >
         <div className="flex items-baseline gap-3">
-          <span className="font-mono text-[12px] tracking-wide text-aqua">{n}</span>
+          <span className="font-display font-medium text-[13px] tracking-[0.02em] text-aqua">{n}</span>
           <h3 className="text-[21px] leading-[1.15] tracking-[-0.02em] text-ink">{title}</h3>
         </div>
         <p className="text-[15px] leading-[1.6] text-ink-soft">{text}</p>
@@ -36,7 +36,7 @@ function Row({ n, title, text, delay, last }) {
       whileHover={{ paddingLeft: 14 }}
       transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
     >
-      <span className="font-mono text-[13px] text-aqua">{n}</span>
+      <span className="font-display font-medium text-[14px] tracking-[0.02em] text-aqua">{n}</span>
       <h3 className="text-[clamp(20px,2.6vw,30px)] tracking-[-0.025em] text-ink">{title}</h3>
       <p className="text-[15px] leading-[1.55] text-ink-soft max-w-[380px]">{text}</p>
     </Reveal>

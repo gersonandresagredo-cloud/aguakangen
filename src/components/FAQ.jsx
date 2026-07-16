@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Plus } from 'lucide-react';
 import Reveal from './Reveal';
-import { useUI } from '../lib/UIContext';
 
 const ITEMS = [
   {
@@ -11,25 +10,13 @@ const ITEMS = [
   },
   {
     q: '¿Realmente funciona?',
-    a: 'Con transparencia: es agua alcalina ionizada, rica en hidrógeno molecular, producida por electrólisis. La mejor manera de convencerte no es leer, es probarla en directo y verla funcionar con tus propios ojos.',
+    a: 'Con transparencia: es agua alcalina ionizada, rica en hidrógeno molecular, producida por electrólisis. En la presentación en directo lo ves funcionar con tus propios ojos y te explico todo sin tecnicismos.',
   },
   {
     q: '¿Y si no sé usarla?',
     a: 'No estás sola. Te acompaño personalmente en la puesta en marcha y tienes acceso a una comunidad que resuelve cualquier duda del día a día. Es más fácil de lo que imaginas.',
   },
 ];
-
-function LastFaqAnswer() {
-  const { openChat } = useUI();
-  return (
-    <p className="px-0 pb-[22px] text-[15.5px] leading-[1.6] text-ink-soft">
-      Justo para eso es la demostración gratuita. Agendas 15 minutos, la pruebas —online o presencial— y decides sin ningún compromiso.{' '}
-      <a href="#" onClick={(e) => { e.preventDefault(); openChat(); }} className="text-aqua-deep font-medium">
-        Habla con mi agente y reserva tu hueco.
-      </a>
-    </p>
-  );
-}
 
 function FaqItem({ q, a, open, onToggle }) {
   return (
@@ -50,7 +37,7 @@ function FaqItem({ q, a, open, onToggle }) {
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         className="overflow-hidden"
       >
-        <div className="px-6">{a ? <p className="pb-[22px] text-[15.5px] leading-[1.6] text-ink-soft">{a}</p> : <LastFaqAnswer />}</div>
+        <div className="px-6"><p className="pb-[22px] text-[15.5px] leading-[1.6] text-ink-soft">{a}</p></div>
       </motion.div>
     </Reveal>
   );
@@ -58,7 +45,7 @@ function FaqItem({ q, a, open, onToggle }) {
 
 export default function FAQ() {
   const [open, setOpen] = useState(-1);
-  const all = [...ITEMS, { q: '¿Cómo la pruebo?', a: null }];
+  const all = ITEMS;
 
   return (
     <section className="relative bg-bg-light px-6 sm:px-10 lg:px-20 py-[clamp(80px,10vw,150px)]">

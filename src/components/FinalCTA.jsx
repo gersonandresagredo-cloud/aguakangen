@@ -24,7 +24,7 @@ export default function FinalCTA() {
           ]}
         />
         <Reveal as="p" delay={300} className="mx-auto mt-6 max-w-[560px] text-[clamp(16px,2vw,19px)] leading-[1.55] text-white/70">
-          Agenda tu demostración gratuita, sin compromiso. Ven, compruébalo y decide con calma.
+          Agenda una demostración gratuita, sin compromiso.
         </Reveal>
 
         <Reveal delay={420} className="mt-9 inline-block">

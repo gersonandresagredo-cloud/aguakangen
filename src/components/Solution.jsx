@@ -49,7 +49,7 @@ export default function Solution() {
                 delay={i * 120}
                 className="relative flex gap-[18px] px-[26px] py-6 rounded-[22px] bg-white/5 border border-white/12 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,.15)]"
               >
-                <span className="font-mono text-[13px] text-aqua-glow pt-[3px]">{s.n}</span>
+                <span className="font-display font-medium text-[14px] tracking-[0.02em] text-aqua-glow pt-[3px]">{s.n}</span>
                 <div>
                   <div className="font-display font-semibold text-white" style={{ fontSize: 'clamp(18px,2.2vw,22px)', letterSpacing: '-0.02em' }}>{s.title}</div>
                   <p className="mt-[7px] text-[14.5px] leading-[1.55] text-white/66">{s.text}</p>

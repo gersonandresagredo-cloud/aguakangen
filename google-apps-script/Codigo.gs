@@ -14,6 +14,10 @@
 // ===== CONFIGURA ESTO =====
 var EMAIL_AVISO = 'rachel.essens.barcelona@gmail.com';
 var NOMBRE_HOJA = 'Reservas';
+// ID de la hoja de cálculo (lo saca de la URL de tu hoja de Google, entre
+// /d/ y /edit). Déjalo vacío '' solo si el script está pegado DENTRO de la
+// hoja (Extensiones → Apps Script). Si dudas, rellénalo: funciona siempre.
+var SHEET_ID = '';
 var NOMBRE_CALENDARIO = 'Agenda de aguakangen';
 var ZONA_HORARIA = 'Europe/Madrid';
 var HORA_INICIO = 16;      // 16:00
@@ -47,12 +51,20 @@ function doPost(e) {
   try {
     var datos = JSON.parse(e.postData.contents);
     var fecha = new Date();
-    var evento = null;
 
+    // 1) Intentamos crear el evento con Meet, pero SIN que un fallo aquí
+    //    (nombre del calendario, permisos…) impida guardar el contacto.
+    var evento = null;
+    var errorEvento = '';
     if (datos.slot) {
-      evento = crearEventoConMeet_(datos);
+      try {
+        evento = crearEventoConMeet_(datos);
+      } catch (errEv) {
+        errorEvento = String(errEv);
+      }
     }
 
+    // 2) Guardamos SIEMPRE la fila en la hoja (es el respaldo del lead).
     var hoja = obtenerHoja_();
     hoja.appendRow([
       fecha,
@@ -61,13 +73,14 @@ function doPost(e) {
       datos.email || '',
       datos.goal || '',
       datos.slot ? formatearFecha_(new Date(datos.slot)) : '',
-      evento ? evento.hangoutLink || '' : ''
+      evento ? (evento.hangoutLink || '') : (errorEvento ? 'ERROR CALENDAR: ' + errorEvento : '')
     ]);
 
-    enviarAvisoRaquel_(datos, fecha, evento);
+    // 3) Avisamos a Raquel siempre.
+    enviarAvisoRaquel_(datos, fecha, evento, errorEvento);
 
     return ContentService
-      .createTextOutput(JSON.stringify({ ok: true, meet: evento ? evento.hangoutLink : null }))
+      .createTextOutput(JSON.stringify({ ok: true, meet: evento ? evento.hangoutLink : null, calendarError: errorEvento || null }))
       .setMimeType(ContentService.MimeType.JSON);
   } catch (err) {
     return ContentService
@@ -165,7 +178,12 @@ function crearEventoConMeet_(datos) {
 // ===== Hoja de cálculo =====
 
 function obtenerHoja_() {
-  var libro = SpreadsheetApp.getActiveSpreadsheet();
+  var libro = SHEET_ID
+    ? SpreadsheetApp.openById(SHEET_ID)
+    : SpreadsheetApp.getActiveSpreadsheet();
+  if (!libro) {
+    throw new Error('No encuentro la hoja. Rellena SHEET_ID arriba con el ID de tu hoja de Google.');
+  }
   var hoja = libro.getSheetByName(NOMBRE_HOJA);
   if (!hoja) {
     hoja = libro.insertSheet(NOMBRE_HOJA);
@@ -180,8 +198,14 @@ function formatearFecha_(fecha) {
   return Utilities.formatDate(fecha, ZONA_HORARIA, "EEEE d 'de' MMMM 'a las' HH:mm");
 }
 
-function enviarAvisoRaquel_(datos, fecha, evento) {
+function enviarAvisoRaquel_(datos, fecha, evento, errorEvento) {
   var asunto = '💧 Nueva reserva de demo — ' + (datos.name || 'sin nombre');
+  var estadoCita = evento
+    ? 'La cita ya está creada en tu calendario "' + NOMBRE_CALENDARIO + '" y el visitante ' +
+      'ha recibido la invitación de Google Calendar con el enlace de Meet.'
+    : '⚠️ NO se pudo crear el evento en el calendario automáticamente' +
+      (errorEvento ? ' (' + errorEvento + ')' : '') +
+      '. Añade la cita a mano y escribe al contacto.';
   var cuerpo =
     'Has recibido una nueva solicitud de demostración desde la web:\n\n' +
     'Nombre:   ' + (datos.name || '-') + '\n' +
@@ -191,8 +215,7 @@ function enviarAvisoRaquel_(datos, fecha, evento) {
     'Cita:     ' + (datos.slot ? formatearFecha_(new Date(datos.slot)) : '-') + '\n' +
     (evento ? 'Meet:     ' + evento.hangoutLink + '\n' : '') +
     'Recibida: ' + fecha.toLocaleString('es-ES') + '\n\n' +
-    'La cita ya está creada en tu calendario "' + NOMBRE_CALENDARIO + '" y el visitante ' +
-    'ha recibido la invitación de Google Calendar con el enlace de Meet.\n' +
+    estadoCita + '\n' +
     'Los datos también quedan guardados en tu hoja de Google.';
   MailApp.sendEmail(EMAIL_AVISO, asunto, cuerpo);
 }
@@ -212,7 +235,7 @@ function prueba_() {
   };
   var hoja = obtenerHoja_();
   hoja.appendRow([new Date(), datos.name, datos.whatsapp, datos.email, datos.goal, '', '']);
-  enviarAvisoRaquel_(datos, new Date(), null);
+  enviarAvisoRaquel_(datos, new Date(), null, '');
 }
 
 /**

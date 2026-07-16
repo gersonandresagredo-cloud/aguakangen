@@ -32,7 +32,9 @@ export default function Solution() {
           words={[
             { text: 'De' }, { text: 'tu' }, { text: 'grifo,' },
             { text: 'agua', style: { color: '#7FE0F0' } },
-            { text: 'extraordinaria.', style: { color: '#7FE0F0' } },
+            { text: 'de', style: { color: '#7FE0F0' } },
+            { text: 'alta', style: { color: '#7FE0F0' } },
+            { text: 'calidad.', style: { color: '#7FE0F0' } },
           ]}
         />
 

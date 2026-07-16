@@ -1,4 +1,4 @@
-import { Power, RefreshCw, Bell, ShowerHead, Heart, Wrench, Fingerprint, BadgeCheck, ArrowUpRight } from 'lucide-react';
+import { Power, RefreshCw, Bell, ShowerHead, Heart, Wrench, Fingerprint, BadgeCheck, ArrowUpRight, MonitorCheck, Languages } from 'lucide-react';
 import Reveal from './Reveal';
 import Parallax from './Parallax';
 import GradientPillButton from './GradientPillButton';
@@ -9,7 +9,7 @@ import { useIsMobile } from '../lib/hooks';
 const PRODUCTS = [
   {
     n: '01', tag: 'Top de gama', name: 'Leveluk K8', img: '/assets/k8.png', floatDur: '8s',
-    desc: 'La máquina antioxidante más potente de Enagic. Ocho placas de titanio bañadas en platino, panel táctil a todo color y voz en 10 idiomas. De un solo grifo salen 5 tipos de agua para toda la casa.',
+    desc: 'El dispositivo antioxidante más potente de Enagic. Ocho placas de titanio bañadas en platino, panel táctil a todo color y voz en 10 idiomas. De un solo grifo salen 5 tipos de agua para toda la casa.',
     specs: [
       { v: '8 placas', l: 'titanio + platino' },
       { v: '−722 mV', l: 'ORP máximo' },
@@ -23,7 +23,22 @@ const PRODUCTS = [
     ],
   },
   {
-    n: '02', tag: 'Spa en casa', name: 'ANESPA DX', img: '/assets/anespa.png', floatDur: '8.6s',
+    n: '02', tag: 'El clásico Enagic', name: 'Leveluk SD501 DX', img: '/assets/sd501dx.png', floatDur: '9s',
+    desc: 'La evolución del ionizador más reconocido de Enagic. Siete placas de titanio bañadas en platino y panel LCD con voz en 8 idiomas. El equilibrio perfecto entre potencia y sencillez para el día a día.',
+    specs: [
+      { v: '7 placas', l: 'titanio + platino' },
+      { v: '−631 mV', l: 'ORP máximo' },
+      { v: 'pH 2.5–11.5', l: '5 tipos de agua' },
+      { v: '5 años', l: 'de garantía' },
+    ],
+    features: [
+      { icon: MonitorCheck, t: 'Panel LCD grande' },
+      { icon: Languages, t: 'Voz en 8 idiomas' },
+      { icon: RefreshCw, t: 'Autolimpieza automática' },
+    ],
+  },
+  {
+    n: '03', tag: 'Spa en casa', name: 'ANESPA DX', img: '/assets/anespa.png', floatDur: '8.6s',
     desc: 'Convierte tu baño en un balneario japonés. Elimina casi el 100% del cloro del agua y añade minerales termales que cuidan la piel y el cabello. Para ducha y baño, cada día.',
     specs: [
       { v: '~100%', l: 'del cloro eliminado' },
@@ -38,7 +53,7 @@ const PRODUCTS = [
     ],
   },
   {
-    n: '03', tag: 'El modelo de inicio', name: 'Leveluk JrIV', img: '/assets/jr4.png', floatDur: '7.4s',
+    n: '04', tag: 'El modelo de inicio', name: 'Leveluk JrIV', img: '/assets/jr4.png', floatDur: '7.4s',
     desc: 'Compacta y de bajo consumo, con 4 placas de titanio y platino. Pensada para una o dos personas que quieren empezar. Los 5 tipos de agua, con un solo botón.',
     specs: [
       { v: '4 placas', l: 'titanio + platino' },

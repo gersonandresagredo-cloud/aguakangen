@@ -10,6 +10,17 @@ export const fadeUp = {
   },
 };
 
+// Versión móvil: sin blur (evita jank de filtros en GPUs modestas) y más
+// rápida/corta — se siente ágil y moderna en vez de "pesada" en pantallas pequeñas.
+export const fadeUpMobile = {
+  hidden: { opacity: 0, y: 14 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.42, ease: EASE },
+  },
+};
+
 export const stagger = (staggerChildren = 0.08, delayChildren = 0) => ({
   hidden: {},
   show: {
@@ -24,6 +35,15 @@ export const wordReveal = {
     opacity: 1,
     filter: 'blur(0px)',
     transition: { duration: 0.7, ease: EASE },
+  },
+};
+
+export const wordRevealMobile = {
+  hidden: { y: '70%', opacity: 0 },
+  show: {
+    y: 0,
+    opacity: 1,
+    transition: { duration: 0.4, ease: EASE },
   },
 };
 

@@ -3,9 +3,9 @@ import Halo from './Halo';
 import { useIsMobile } from '../lib/hooks';
 
 const ROWS = [
-  { n: '01', title: 'Grifo y embotellada', text: 'Oxidante (ORP positivo). Cada sorbo suma estrés a tus células.' },
+  { n: '01', title: 'Grifo y embotellada', text: 'Oxidante (ORP positivo). Cada sorbo suma estrés a tus células. Todo lo que oxida, envejece.' },
   { n: '02', title: 'Deshidratación silenciosa', text: 'Bebes… pero no hidratas. Tu cuerpo absorbe a medias.' },
-  { n: '03', title: 'Plástico y coste invisible', text: 'Cientos de botellas al año. Dinero tirado y microplásticos de regalo.' },
+  { n: '03', title: 'Plástico y coste invisible', text: 'Cientos de botellas al año. Dinero tirado y microplásticos en tu cuerpo.' },
 ];
 
 function Row({ n, title, text, delay, last }) {
@@ -59,7 +59,7 @@ export default function Problem() {
           Lo que no ves en tu vaso
         </Reveal>
         <Reveal delay={80} as="h2" className="mt-[18px] max-w-[900px] text-[clamp(28px,5vw,60px)] leading-[1.08] sm:leading-[1.02] text-ink">
-          El <span className="text-aqua">90%</span> de lo que bebes trabaja en tu contra.
+          El <span className="text-aqua">90%</span> de lo que bebes podría estar restándole bienestar a tu cuerpo.
         </Reveal>
 
         <div className="mt-10 sm:mt-[clamp(44px,6vw,80px)] flex flex-col">
@@ -73,7 +73,7 @@ export default function Problem() {
           className="mt-10 sm:mt-[clamp(44px,6vw,70px)] max-w-[820px] font-display font-medium text-ink"
           style={{ fontSize: 'clamp(21px,3vw,34px)', lineHeight: 1.28, letterSpacing: '-0.02em' }}
         >
-          No es una cuestión de sed. Es una cuestión de <span className="text-aqua">cómo quieres envejecer.</span>
+          No es solo quitar la sed. Es <span className="text-aqua">cuidar tu cuerpo desde dentro.</span>
         </Reveal>
       </div>
     </section>

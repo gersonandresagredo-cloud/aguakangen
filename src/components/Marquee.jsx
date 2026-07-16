@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { motion, useMotionValue, useAnimationFrame } from 'framer-motion';
 import { Waves, ShieldCheck, Leaf, Layers, Home } from 'lucide-react';
 import IconBadge from './IconBadge';
+import { useIsMobile } from '../lib/hooks';
 
 const ITEMS = [
   { icon: Waves, title: 'Hidrata de verdad', sub: 'tu cuerpo la absorbe mejor' },
@@ -28,6 +29,12 @@ export default function Marquee() {
   const trackRef = useRef(null);
   const halfW = useRef(0);
   const x = useMotionValue(0);
+  const isMobile = useIsMobile();
+  // En escritorio el scroll "empuja" bastante el slider (efecto reactivo vistoso
+  // con rueda de ratón). En móvil los gestos de scroll son mucho más bruscos
+  // (flicks táctiles), así que se reduce mucho ese acople para que no dé
+  // tirones — el movimiento pasa a apoyarse sobre todo en el ritmo constante.
+  const scrollFactor = isMobile ? 0.12 : 0.55;
 
   useEffect(() => {
     const measure = () => { if (trackRef.current) halfW.current = trackRef.current.scrollWidth / 2; };
@@ -42,7 +49,7 @@ export default function Marquee() {
     if (!halfW.current) return;
     const drift = (time / 1000) * 26;
     const sy = window.scrollY;
-    const pos = (sy * 0.55 + drift) % halfW.current;
+    const pos = (sy * scrollFactor + drift) % halfW.current;
     x.set(-pos);
   });
 

@@ -19,7 +19,7 @@ export default function Benefits() {
           Beneficios
         </Reveal>
         <Reveal delay={80} as="h2" className="mt-[18px] max-w-[860px] text-[clamp(28px,5vw,58px)] leading-[1.1] sm:leading-[1.02] text-ink">
-          Lo que cambia cuando <span className="text-aqua">cambias tu agua.</span>
+          Lo que cambia, cuando <span className="text-aqua">cambias tu agua.</span>
         </Reveal>
         <div className="mt-10 sm:mt-[clamp(44px,6vw,80px)] grid gap-x-[clamp(24px,4vw,56px)] gap-y-8 sm:gap-y-[clamp(28px,4vw,44px)]" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%,280px), 1fr))' }}>
           {ITEMS.map((it, i) => (

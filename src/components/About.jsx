@@ -28,12 +28,15 @@ export default function About() {
             Hola, soy <span className="text-aqua">Raquel.</span>
           </Reveal>
           <Reveal delay={160} as="p" className="mt-[22px] text-[clamp(16px,1.9vw,18px)] leading-[1.65] text-ink-soft">
-            Hace unos años cambié el agua que bebía en casa casi por curiosidad. Lo que no esperaba es cómo cambiaría mi rutina: más ligera por las mañanas, sin arrastrar el bidón de botellas, con la sensación de estar cuidándome de verdad.
+            Hace unos años decidí cambiar el agua que bebía en casa: quería algo de verdadera calidad y dejar atrás el plástico de las botellas.
           </Reveal>
           <Reveal delay={220} as="p" className="mt-4 text-[clamp(16px,1.9vw,18px)] leading-[1.65] text-ink-soft">
-            Desde entonces acompaño a otras personas a dar el mismo paso, sin prisas y sin presión. <span className="text-ink font-medium">No vendo máquinas: comparto un cambio que viví.</span>
+            Lo que no imaginé fue todo lo que ese cambio traería con él: más energía, mejor digestión, la sensación real de estar cuidando mi cuerpo cada día.
           </Reveal>
-          <Reveal delay={300} className="mt-7 flex flex-wrap items-center gap-3">
+          <Reveal delay={280} as="p" className="mt-4 text-[clamp(16px,1.9vw,18px)] leading-[1.65] text-ink-soft">
+            Desde entonces acompaño a otras personas a dar ese mismo paso. Porque a veces el mayor cambio en tu bienestar no viene de algo complicado, sino de algo tan cotidiano como el agua que bebes.
+          </Reveal>
+          <Reveal delay={340} className="mt-7 flex flex-wrap items-center gap-3">
             <a href="#" data-cursor="hover" className="inline-flex items-center gap-2.5 pl-3 pr-[18px] py-2.5 rounded-full bg-bg-light text-ink text-[14px] font-medium">
               <IconBadge icon={Camera} size={26} iconSize={13} />Instagram
             </a>

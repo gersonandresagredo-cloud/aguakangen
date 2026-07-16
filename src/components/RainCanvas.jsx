@@ -7,6 +7,9 @@ export default function RainCanvas() {
   const isMobile = useIsMobile();
 
   useEffect(() => {
+    // En móvil se queda solo con las burbujas: menos ruido visual en pantalla
+    // pequeña y un bucle de animación menos que compite por rendimiento.
+    if (isMobile) return;
     const c = canvasRef.current;
     const ctx = c.getContext('2d');
     let W, H;
@@ -66,6 +69,8 @@ export default function RainCanvas() {
       window.removeEventListener('resize', fit);
     };
   }, [isMobile]);
+
+  if (isMobile) return null;
 
   return (
     <canvas
